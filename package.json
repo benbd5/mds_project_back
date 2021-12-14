@@ -1,5 +1,5 @@
 {
-  "name": "mds_project",
+  "name": "mds_project_back",
   "version": "1.0.0",
   "description": "Social network for sharing sessions in aquatics sports",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/benbd5/mds_project.git"
+    "url": "git+https://github.com/benbd5/mds_project_back.git"
   },
   "author": "Benjamin Belz",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/benbd5/mds_project/issues"
+    "url": "https://github.com/benbd5/mds_project_back/issues"
   },
-  "homepage": "https://github.com/benbd5/mds_project#readme",
+  "homepage": "https://github.com/benbd5/mds_project_back#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
