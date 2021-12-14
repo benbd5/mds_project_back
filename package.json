@@ -1,0 +1,31 @@
+{
+  "name": "mds_project",
+  "version": "1.0.0",
+  "description": "Social network for sharing sessions in aquatics sports",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benbd5/mds_project.git"
+  },
+  "author": "Benjamin Belz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/benbd5/mds_project/issues"
+  },
+  "homepage": "https://github.com/benbd5/mds_project#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "standard": "^16.0.4"
+  }
+}
