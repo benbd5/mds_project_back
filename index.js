@@ -2,18 +2,29 @@ require('dotenv').config()
 
 const express = require('express')
 const app = express()
+const mongoose = require('mongoose')
 const port = process.env.PORT
 const cors = require('cors')
 
 // Autoriser les requêtes depuis le front React (Access Control Allow Origin)
 app.use(cors())
 
-app.get('/test', (req, res) => {
-  res.json({
-    name: 'Bob'
-  })
-})
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+try {
+  mongoose
+    .connect(`mongodb+srv://${process.env.DB_USER_PASS}@cluster0.tvfvl.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`)
+  console.log('Connecté à Mongo')
+} catch (error) {
+  console.error(error)
+}
+
+// Routes
+const sessionRoutes = require('./routes/sessionRoutes')
+
+app.use(sessionRoutes)
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`http://localhost:${port}`)
 })
