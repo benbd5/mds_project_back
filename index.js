@@ -22,8 +22,10 @@ try {
 
 // Routes
 const sessionRoutes = require('./routes/sessionRoutes')
+const userRoutes = require('./routes/userRoutes')
 
 app.use(sessionRoutes)
+app.use(userRoutes)
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`)
