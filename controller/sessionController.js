@@ -1,4 +1,13 @@
-const Session = require('../models/Session')
+const { Session, sportValues } = require('../models/Session')
+
+const getSports = (req, res) => {
+  try {
+    // Retourner le tableau avec les valeurs du modèle pour 'sport'
+    return res.send(sportValues)
+  } catch (error) {
+    return res.status(500).send(error)
+  }
+}
 
 const getAllSessions = (req, res) => {
   try {
@@ -113,6 +122,7 @@ module.exports = {
   postSession,
   getAllSessions,
   getOneSession,
+  getSports,
   patchSession,
   deleteSession
 }

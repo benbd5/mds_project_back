@@ -4,6 +4,8 @@ const sessionController = require('../controller/sessionController')
 router.get('/sessions', sessionController.getAllSessions)
 router.get('/session/:id', sessionController.getOneSession)
 
+router.get('/sport-values', sessionController.getSports)
+
 router.post('/add', sessionController.postSession)
 
 router.patch('/edit_session', sessionController.patchSession)

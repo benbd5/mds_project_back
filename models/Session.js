@@ -4,6 +4,7 @@ const { Schema } = mongoose
 const SessionSchema = Schema({
   sport: {
     type: String,
+    enum: ['Surf', 'Wing foil', 'Bodyboard', 'Kite-Surf'],
     required: true
   },
   description: {
@@ -24,4 +25,12 @@ const SessionSchema = Schema({
   }
 }, { timestamps: true })
 
-module.exports = mongoose.model('Session', SessionSchema)
+const Session = mongoose.model('Session', SessionSchema)
+
+// Accès aux valeurs 'enum' de sport pour les réutiliser en React lors de l'ajout d'une session
+const sportValues = Session.schema.path('sport').enumValues
+
+module.exports = {
+  Session,
+  sportValues
+}
