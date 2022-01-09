@@ -8,7 +8,7 @@ router.get('/sport-values', sessionController.getSports)
 
 router.post('/add', sessionController.postSession)
 
-router.patch('/edit_session', sessionController.patchSession)
+router.patch('/edit_session/:id', sessionController.patchSession)
 
 router.delete('/delete_session', sessionController.deleteSession)
 
