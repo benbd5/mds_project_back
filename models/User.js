@@ -16,6 +16,15 @@ const UserSchema = Schema({
   },
   pseudo: {
     type: String
+  },
+  firstname: {
+    type: String
+  },
+  lastname: {
+    type: String
+  },
+  phone: {
+    type: String
   }
 }, { timestamps: true })
 

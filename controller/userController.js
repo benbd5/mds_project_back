@@ -3,12 +3,12 @@ const { generateToken } = require('../helpers/tokenHelper')
 const registerErrors = require('../helpers/errorsHelper')
 
 const register = async (req, res) => {
-  const { pseudo, email, password } = req.body
+  const { pseudo, email, password, lastname, firstname, phone } = req.body
 
   if (!pseudo || !email || !password) return res.status(500).send('Email, password or pseudo is missing')
 
   try {
-    const user = await User.create({ pseudo, email, password })
+    const user = await User.create({ pseudo, email, password, lastname, firstname, phone })
     res.status(201).json({ user })
   } catch (err) {
     const error = registerErrors(err)
@@ -18,6 +18,8 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body
+
+  console.log(email, password)
 
   if (!email || !password) return res.status(500).send('Email or password is missing')
 
