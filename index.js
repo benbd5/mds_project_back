@@ -6,6 +6,10 @@ const mongoose = require('mongoose')
 const port = process.env.PORT
 const cors = require('cors')
 
+// Import du middleware pour logger les appels d'API
+const loggerMiddleware = require('./middlewares/logger')
+app.use(loggerMiddleware)
+
 // Autoriser les requêtes depuis le front React (Access Control Allow Origin)
 app.use(cors())
 

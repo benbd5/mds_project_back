@@ -1,5 +1,5 @@
 const User = require('../models/User')
-const { generateToken } = require('../helpers/tokenHelper')
+const { generateToken, extractIdFromRequestAuthHeader } = require('../helpers/tokenHelper')
 const registerErrors = require('../helpers/errorsHelper')
 
 const register = async (req, res) => {
@@ -11,8 +11,10 @@ const register = async (req, res) => {
     const user = await User.create({ pseudo, email, password, lastname, firstname, phone })
     res.status(201).json({ user })
   } catch (err) {
-    const error = registerErrors(err)
-    res.status(401).send({ error })
+    // const error = registerErrors(err)
+    // res.status(401).send({ error })
+    console.error(err)
+    res.status(401).send(err)
   }
 }
 
@@ -57,7 +59,18 @@ const login = async (req, res) => {
   }
 }
 
+const getUser = (req, res) => {
+  // On récupère l'id depuis le helper
+  const id = extractIdFromRequestAuthHeader(req)
+  console.log('getUser', id)
+  // Méthode Promesse
+  User.findById(id).select('-password') // pour ne pas sélectionner le password retournées par mongodb (plus simple avec les promesses)
+    .then(result => res.send(result))
+    .catch(error => res.status(500).send(error))
+}
+
 module.exports = {
   register,
-  login
+  login,
+  getUser
 }
