@@ -1,6 +1,5 @@
 const User = require('../models/User')
 const { generateToken, extractIdFromRequestAuthHeader } = require('../helpers/tokenHelper')
-const registerErrors = require('../helpers/errorsHelper')
 
 const register = async (req, res) => {
   const { pseudo, email, password, lastname, firstname, phone } = req.body
@@ -8,8 +7,29 @@ const register = async (req, res) => {
   if (!pseudo || !email || !password) return res.status(500).send('Email, password or pseudo is missing')
 
   try {
-    const user = await User.create({ pseudo, email, password, lastname, firstname, phone })
-    res.status(201).json({ user })
+    const user = new User({
+      email, password, firstname, lastname, phone
+    })
+    user.save((error, result) => {
+      if (error) return res.status(500).send(error)
+
+      // Pour supprimer le password, il faut passer le user en objet pour utiliser la méthode delete
+      // _user pour ne pas remplacer la constante user
+      const _user = result.toObject()
+      delete user.password
+
+      // Génération du token
+      const payload = {
+        id: _user._id
+      }
+      generateToken(payload, (error, token) => {
+        if (error) return res.status(500).send('Error while generating token')
+        return res.send({
+          user,
+          token
+        })
+      })
+    })
   } catch (err) {
     // const error = registerErrors(err)
     // res.status(401).send({ error })
