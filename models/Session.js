@@ -4,8 +4,7 @@ const { Schema } = mongoose
 const SessionSchema = Schema({
   sport: {
     type: String,
-    enum: ['Surf', 'Wing foil', 'Bodyboard', 'Kite-Surf'],
-    required: true
+    enum: ['Surf', 'Wing foil', 'Bodyboard', 'Kite-Surf']
   },
   description: {
     type: String
@@ -19,10 +18,10 @@ const SessionSchema = Schema({
     default: Date.now,
     required: true
   },
-  members: {
+  members: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
-  },
+  }],
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User'

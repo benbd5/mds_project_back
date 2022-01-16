@@ -29,6 +29,10 @@ const UserSchema = Schema({
   sessions: [{
     type: Schema.Types.ObjectId,
     ref: 'Session'
+  }],
+  participation: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }]
 }, { timestamps: true })
 

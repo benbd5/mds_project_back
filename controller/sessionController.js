@@ -1,3 +1,4 @@
+const { extractIdFromRequestAuthHeader } = require('../helpers/tokenHelper')
 const { Session, sportValues } = require('../models/Session')
 const User = require('../models/User')
 
@@ -6,7 +7,7 @@ const getSports = (req, res) => {
     // Retourner le tableau avec les valeurs du modèle pour 'sport'
     return res.send(sportValues)
   } catch (error) {
-    return res.status(500).send(error)
+    return res.status(500).send('Erreur lors de la récupération des sports')
   }
 }
 
@@ -14,13 +15,13 @@ const getAllSessions = (req, res) => {
   try {
     Session.find((error, result) => {
       if (error) {
-        return res.status(500).send('Erreur lors de la récupération des restaurants')
+        return res.status(500).send('Erreur lors de la récupération des sessions')
       } else {
         return res.send(result)
       }
-    })
+    }).sort({ date: -1 })
   } catch (error) {
-    return res.status(500).send(error)
+    return res.status(500).send('Erreur lors de la récupération des sessions')
   }
 }
 
@@ -38,7 +39,7 @@ const getOneSession = (req, res) => {
       }
     })
   } catch (error) {
-    return res.status(500).send(error)
+    return res.status(500).send('Erreur lors de la récupération de la session')
   }
 }
 
@@ -54,8 +55,11 @@ const postSession = (req, res) => {
   })
 
   try {
-    session.save((error, result) => {
-      if (error) return res.status(500).send(error)
+    session.save((error, result, next) => {
+      if (error) {
+        res.status(500).send(error)
+        next(error)
+      }
 
       /**
        * Ajout de la session à l'utilisateur connecté qui créé la session
@@ -125,11 +129,48 @@ const deleteSession = (req, res) => {
   }
 }
 
+// Ajout d'un utilisateur à une session en tant que participant (membre) et ajout de la session dans l'utilisateur en tant que membre
+const memberOfSession = (req, res) => {
+  // On récupère les id de l'utilisateur et de la session
+  const idUser = extractIdFromRequestAuthHeader(req)
+  const idSession = req.params.id
+
+  try {
+    // Récupération des informations de l'utilisateur
+    User.findById(idUser, (error, resultUser) => {
+      if (error) return res.status(500).send('Erreur lors de la récupération des informations de l\'utilisateur')
+
+      // Récupération des informations de la session et ajout de l'utilisateur dans les membres
+      Session.findByIdAndUpdate(idSession, { $push: { members: idUser } }, (error, result) => {
+        if (error) return res.status(500).send(error)
+
+        // Récupération des informations de l'utilisateur et ajout de la session dans les participations
+        User.findByIdAndUpdate(idUser, { $push: { participation: idSession } }, (error, sess) => {
+          if (error) return res.send(500).send('Erreur lors de la récupération des sessions')
+
+          else {
+            Session.find((error, result) => {
+              if (error) {
+                return res.status(500).send(error)
+              } else {
+                return res.send(result)
+              }
+            })
+          }
+        })
+      })
+    })
+  } catch (error) {
+    return res.status(500).send(error)
+  }
+}
+
 module.exports = {
   postSession,
   getAllSessions,
   getOneSession,
   getSports,
   patchSession,
-  deleteSession
+  deleteSession,
+  memberOfSession
 }
