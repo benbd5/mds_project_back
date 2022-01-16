@@ -1,4 +1,5 @@
 const { Session, sportValues } = require('../models/Session')
+const User = require('../models/User')
 
 const getSports = (req, res) => {
   try {
@@ -41,27 +42,33 @@ const getOneSession = (req, res) => {
   }
 }
 
-const postSession = async (req, res) => {
-  const { sport, description, place, date } = req.body
-  console.log(req.body)
+const postSession = (req, res) => {
+  const { sport, description, place, date, userId } = req.body
   if (!sport) res.status(500).send('Missing sport')
   if (!description) res.status(500).send('Missing description')
   if (!place) res.status(500).send('Missing place')
   if (!date) res.status(500).send('Missing date')
 
-  try {
-    const session = new Session({
-      sport, description, place, date
-    })
+  const session = new Session({
+    sport, description, place, date, userId
+  })
 
+  try {
     session.save((error, result) => {
       if (error) return res.status(500).send(error)
-      Session.find((error, result) => {
-        if (error) {
-          return res.status(500).send('Erreur lors de la récupération des restaurants')
-        } else {
+
+      /**
+       * Ajout de la session à l'utilisateur connecté qui créé la session
+       * $push est une fonction de mongoose : https://docs.mongodb.com/manual/reference/operator/update/push/
+       * et permet d'implémenter un tableau, ici, le tableau sessions du model User
+       */
+      User.findByIdAndUpdate(userId, { $push: { sessions: session._id } }, (error, sess) => {
+        if (error) return res.send(500).send('Erreur lors de la récupération des sessions')
+
+        Session.find((error, result) => {
+          if (error) return res.send(500).send('Erreur lors de la récupération des sessions')
           return res.send(result)
-        }
+        })
       })
     })
   } catch (error) {

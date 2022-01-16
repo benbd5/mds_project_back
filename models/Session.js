@@ -22,6 +22,10 @@ const SessionSchema = Schema({
   members: {
     type: Schema.Types.ObjectId,
     ref: 'User'
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }
 }, { timestamps: true })
 

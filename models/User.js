@@ -25,7 +25,11 @@ const UserSchema = Schema({
   },
   phone: {
     type: String
-  }
+  },
+  sessions: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Session'
+  }]
 }, { timestamps: true })
 
 // Méthode appelé à chaque enregistrement d'utilisateur
