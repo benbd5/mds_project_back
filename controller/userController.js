@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const { generateToken, extractIdFromRequestAuthHeader } = require('../helpers/tokenHelper')
+const { Session } = require('../models/Session')
 
 const register = async (req, res) => {
   const { pseudo, email, password, lastname, firstname, phone } = req.body
@@ -83,10 +84,28 @@ const getUser = (req, res) => {
   // On récupère l'id depuis le helper
   const id = extractIdFromRequestAuthHeader(req)
   console.log('getUser', id)
-  // Méthode Promesse
+
+  /*   // Méthode Promesse
   User.findById(id).select('-password') // pour ne pas sélectionner le password retournées par mongodb (plus simple avec les promesses)
     .then(result => res.send(result))
-    .catch(error => res.status(500).send(error))
+    .catch(error => res.status(500).send(error)) */
+
+  try {
+    // On récupère les informations de l'utilisateur connecté
+    User.findById(id, (error, resultUser) => {
+      if (error) return res.status(500).send('Erreur lors de la récupération des informations de l\'utilisateur')
+
+      // On récupère les sessions que l'utilisateur connecté a créé
+      // https://docs.mongodb.com/manual/reference/operator/query/in/#op._S_in
+      Session.find({ _id: { $in: resultUser.sessions } }, (error, result) => {
+        if (error) return res.status(500).send('Erreur lors de la récupération des informations des sessions liées à l\'utilisateur')
+        const allResults = [resultUser, result]
+        return res.send(allResults)
+      })
+    })
+  } catch (error) {
+    return res.status(500).send(error)
+  }
 }
 
 module.exports = {
