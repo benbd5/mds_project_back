@@ -26,13 +26,15 @@ const UserSchema = Schema({
   phone: {
     type: String
   },
+  // Session que l'utilisateur a créé
   sessions: [{
     type: Schema.Types.ObjectId,
     ref: 'Session'
   }],
+  // Les sessions auxquelles l'utilisateur participe
   participation: [{
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'Session'
   }]
 }, { timestamps: true })
 

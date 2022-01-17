@@ -18,6 +18,7 @@ const SessionSchema = Schema({
     default: Date.now,
     required: true
   },
+  // Les utilisateurs qui ont rejoint une session
   members: [{
     type: Schema.Types.ObjectId,
     ref: 'User'

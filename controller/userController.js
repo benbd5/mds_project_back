@@ -97,10 +97,15 @@ const getUser = (req, res) => {
 
       // On récupère les sessions que l'utilisateur connecté a créé
       // https://docs.mongodb.com/manual/reference/operator/query/in/#op._S_in
-      Session.find({ _id: { $in: resultUser.sessions } }, (error, result) => {
+      Session.find({ _id: { $in: resultUser.sessions } }, (error, resultSessions) => {
         if (error) return res.status(500).send('Erreur lors de la récupération des informations des sessions liées à l\'utilisateur')
-        const allResults = [resultUser, result]
-        return res.send(allResults)
+
+        Session.find({ _id: { $in: resultUser.participation } }, (error, resultParticipation) => {
+          if (error) return res.status(500).send('Erreur lors de la récupération des informations des participations liées à l\'utilisateur')
+
+          const allResults = [resultUser, resultSessions, resultParticipation]
+          return res.send(allResults)
+        })
       })
     })
   } catch (error) {

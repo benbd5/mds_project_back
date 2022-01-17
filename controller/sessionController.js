@@ -31,12 +31,17 @@ const getOneSession = (req, res) => {
   if (!id) return res.status(500).send('Id is missing')
 
   try {
-    Session.findById(id, (error, result) => {
-      if (error) {
-        return res.status(500).send('Erreur lors de la récupération de la session')
-      } else {
-        return res.send(result)
-      }
+    Session.findById(id, (error, resultSession) => {
+      console.log("resultSession", resultSession);
+      if (error) return res.status(500).send('Erreur lors de la récupération de la session')
+
+      User.find({ _id: { $in: resultSession.members } }, (error, resultUser) => {
+        console.log("resultUser", resultUser);
+        if (error) return res.status(500).send('Erreur lors de la récupération des informations de l\'utilisateur')
+
+        const allResults = [resultSession, resultUser]
+        return res.send(allResults)
+      })
     })
   } catch (error) {
     return res.status(500).send('Erreur lors de la récupération de la session')
