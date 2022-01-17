@@ -1,4 +1,5 @@
 const router = require('express').Router()
+
 const sessionController = require('../controller/sessionController')
 
 router.get('/sessions', sessionController.getAllSessions)

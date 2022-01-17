@@ -83,7 +83,6 @@ const login = async (req, res) => {
 const getUser = (req, res) => {
   // On récupère l'id depuis le helper
   const id = extractIdFromRequestAuthHeader(req)
-  console.log('getUser', id)
 
   /*   // Méthode Promesse
   User.findById(id).select('-password') // pour ne pas sélectionner le password retournées par mongodb (plus simple avec les promesses)
@@ -113,8 +112,21 @@ const getUser = (req, res) => {
   }
 }
 
+const pictureProfile = async (req, res) => {
+  const id = extractIdFromRequestAuthHeader(req)
+  const pictureProfile = req.body.files
+  console.log('picture req', pictureProfile)
+  if (!req.files) return res.status(500).send('Veuillez sélectionner une photo')
+  User.findByIdAndUpdate(id, pictureProfile, (error, result) => {
+    if (error) return res.status(500).send(error)
+    console.log('result', result)
+    return result
+  })
+}
+
 module.exports = {
   register,
   login,
-  getUser
+  getUser,
+  pictureProfile
 }

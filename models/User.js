@@ -26,6 +26,9 @@ const UserSchema = Schema({
   phone: {
     type: String
   },
+  pictureProfile: {
+    type: String
+  },
   // Session que l'utilisateur a créé
   sessions: [{
     type: Schema.Types.ObjectId,
