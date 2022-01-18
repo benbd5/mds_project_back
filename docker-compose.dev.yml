@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  app:
+    container_name: mds_back
+    image: mds_back
+    build:
+      context: .
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 4000:4000
