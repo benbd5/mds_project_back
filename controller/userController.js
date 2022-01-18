@@ -9,7 +9,7 @@ const register = async (req, res) => {
 
   try {
     const user = new User({
-      email, password, firstname, lastname, phone
+      pseudo, email, password, firstname, lastname, phone
     })
     user.save((error, result) => {
       if (error) return res.status(500).send(error)
@@ -112,21 +112,29 @@ const getUser = (req, res) => {
   }
 }
 
-const pictureProfile = async (req, res) => {
+const addPictureProfile = async (req, res) => {
   const id = extractIdFromRequestAuthHeader(req)
-  const pictureProfile = req.body.files
-  console.log('picture req', pictureProfile)
-  if (!req.files) return res.status(500).send('Veuillez sélectionner une photo')
-  User.findByIdAndUpdate(id, pictureProfile, (error, result) => {
+  const pictureProfile = req.file
+
+  const filename = pictureProfile.originalname + Math.floor(Math.random() * 100) + pictureProfile.mimetype
+
+  console.log('picture', pictureProfile)
+  console.log('filename', filename)
+
+  if (!pictureProfile) return res.status(500).send('Veuillez sélectionner une photo')
+
+  User.findByIdAndUpdate(id, { pictureProfile: filename }, (error, result) => {
     if (error) return res.status(500).send(error)
     console.log('result', result)
-    return result
+    return res.send(filename)
   })
+
+  // return res.send(filename)
 }
 
 module.exports = {
   register,
   login,
   getUser,
-  pictureProfile
+  addPictureProfile
 }
