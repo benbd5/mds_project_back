@@ -12,7 +12,8 @@ const UserSchema = Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    select: false // Evite que le mot de passe soit retourné dans les Objets
   },
   pseudo: {
     type: String
