@@ -121,7 +121,7 @@ const addPictureProfile = async (req, res) => {
 
   if (!pictureProfile) return res.status(500).send('Veuillez sélectionner une photo')
 
-  User.findByIdAndUpdate(id, { pictureProfile: pictureProfile.path }, (error, result) => {
+  User.findByIdAndUpdate(id, { pictureProfile: pictureProfile.path + '.png' }, (error, result) => {
     if (error) return res.status(500).send(error)
     console.log('result', result)
     return res.send(filename)

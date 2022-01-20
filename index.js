@@ -13,6 +13,8 @@ app.use(loggerMiddleware)
 // Autoriser les requêtes depuis le front React (Access Control Allow Origin)
 app.use(cors())
 
+app.use(express.static('public'))
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
