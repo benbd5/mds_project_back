@@ -84,14 +84,10 @@ const getUser = (req, res) => {
   // On récupère l'id depuis le helper
   const id = extractIdFromRequestAuthHeader(req)
 
-  /*   // Méthode Promesse
-  User.findById(id).select('-password') // pour ne pas sélectionner le password retournées par mongodb (plus simple avec les promesses)
-    .then(result => res.send(result))
-    .catch(error => res.status(500).send(error)) */
-
   try {
     // On récupère les informations de l'utilisateur connecté
     User.findById(id, (error, resultUser) => {
+      console.log(resultUser)
       if (error) return res.status(500).send('Erreur lors de la récupération des informations de l\'utilisateur')
 
       // On récupère les sessions que l'utilisateur connecté a créé
@@ -116,20 +112,20 @@ const addPictureProfile = async (req, res) => {
   const id = extractIdFromRequestAuthHeader(req)
   const pictureProfile = req.file
 
-  const filename = pictureProfile.originalname + Math.floor(Math.random() * 100) + pictureProfile.mimetype
+  const filename = pictureProfile.originalname
+  // + Math.floor(Math.random() * 100) + pictureProfile.mimetype
 
   console.log('picture', pictureProfile)
+  console.log('path', pictureProfile.path + '.png')
   console.log('filename', filename)
 
   if (!pictureProfile) return res.status(500).send('Veuillez sélectionner une photo')
 
-  User.findByIdAndUpdate(id, { pictureProfile: filename }, (error, result) => {
+  User.findByIdAndUpdate(id, { pictureProfile: pictureProfile.path }, (error, result) => {
     if (error) return res.status(500).send(error)
     console.log('result', result)
     return res.send(filename)
   })
-
-  // return res.send(filename)
 }
 
 module.exports = {

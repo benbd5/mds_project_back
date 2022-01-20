@@ -61,7 +61,6 @@ const postSession = (req, res) => {
     session.save((error, result, next) => {
       if (error) {
         res.status(500).send(error)
-        next(error)
       }
 
       /**

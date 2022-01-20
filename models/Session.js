@@ -4,7 +4,8 @@ const { Schema } = mongoose
 const SessionSchema = Schema({
   sport: {
     type: String,
-    enum: ['Surf', 'Wing foil', 'Bodyboard', 'Kite-Surf']
+    enum: ['Surf', 'Wing foil', 'Bodyboard', 'Kite-Surf'],
+    default: 'Surf'
   },
   description: {
     type: String
