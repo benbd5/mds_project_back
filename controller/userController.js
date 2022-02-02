@@ -108,29 +108,8 @@ const getUser = (req, res) => {
   }
 }
 
-const addPictureProfile = async (req, res) => {
-  const id = extractIdFromRequestAuthHeader(req)
-  const pictureProfile = req.file
-
-  const filename = pictureProfile.originalname
-  // + Math.floor(Math.random() * 100) + pictureProfile.mimetype
-
-  console.log('picture', pictureProfile)
-  console.log('path', pictureProfile.path + '.png')
-  console.log('filename', filename)
-
-  if (!pictureProfile) return res.status(500).send('Veuillez sélectionner une photo')
-
-  User.findByIdAndUpdate(id, { pictureProfile: pictureProfile.path + '.png' }, (error, result) => {
-    if (error) return res.status(500).send(error)
-    console.log('result', result)
-    return res.send(filename)
-  })
-}
-
 module.exports = {
   register,
   login,
-  getUser,
-  addPictureProfile
+  getUser
 }

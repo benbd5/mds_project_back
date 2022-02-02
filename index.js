@@ -13,7 +13,9 @@ app.use(loggerMiddleware)
 // Autoriser les requêtes depuis le front React (Access Control Allow Origin)
 app.use(cors())
 
+// Dossier public qui permet d'accéder aux photos de profile des utilisateurs
 app.use(express.static('public'))
+app.use('/uploads', express.static('uploads'))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
